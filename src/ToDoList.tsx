@@ -42,39 +42,62 @@ const ToDoList: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white rounded-lg shadow p-6">
+    <div className="max-w-2xl mx-auto mt-10 bg-white rounded-lg shadow p-6">
       <div className="flex items-center mb-4">
         <h1 className="text-2xl font-bold text-gray-800 mr-2">To Do</h1>
         <span className="text-2xl text-gray-400">{items.length}</span>
       </div>
       <form className="mb-6" onSubmit={handleSubmit}>
-        <div className="flex gap-4 mb-4">
-          <input
-            type="text"
-            placeholder="Task Name*"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="flex flex-row gap-4 items-start">
+          {/* Left column: inputs (80%) */}
+          <div className="flex flex-col flex-grow w-5/6 gap-4">
+            <div className="flex flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Task Name*"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="w-40 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <textarea
+              placeholder="Description (optional)"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          {/* Right column: button (20%) */}
+          <div className="flex flex-col w-1/6 justify-start items-end">
+            <button
+              type="submit"
+              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition w-full flex items-center justify-center gap-2"
+              style={{ minWidth: "90px" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+              Add
+            </button>
+          </div>
         </div>
-        <textarea
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-        >
-          Add To-Do
-        </button>
       </form>
 
       {/* Split Incomplete Tasks: Overdue & Outstanding */}
@@ -111,7 +134,7 @@ const ToDoList: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={false}
-                        className="form-checkbox h-4 w-4"
+                        className="form-checkbox h-4 w-4 accent-purple-500"
                         onChange={() => {
                           const originalIdx = items.findIndex(
                             (i) =>
@@ -130,13 +153,23 @@ const ToDoList: React.FC = () => {
                           }
                         }}
                       />
-                      <span className="font-bold text-gray-800">
-                        {item.name}
-                      </span>
+                      <div className="ml-1">
+                        <span className="font-bold text-gray-800">
+                          {item.name}
+                        </span>
+                        <div className="mb-2 text-gray-700">
+                          {item.description}
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm text-red-500">{item.dueDate}</span>
+                    <span className="text-sm text-red-500">
+                      {new Date(item.dueDate).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                      })}
+                    </span>
                   </div>
-                  <div className="mb-2 text-gray-700">{item.description}</div>
                 </li>
               ))}
             </ul>
@@ -163,9 +196,6 @@ const ToDoList: React.FC = () => {
           </span>
         </div>
 
-        {/* <h2 className="text-xl font-semibold mb-2 text-gray-700">
-          Outstanding
-        </h2> */}
         {(() => {
           const today = new Date();
           today.setHours(0, 0, 0, 0);
@@ -184,7 +214,7 @@ const ToDoList: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={false}
-                        className="form-checkbox h-4 w-4"
+                        className="form-checkbox h-4 w-4 accent-purple-500"
                         onChange={() => {
                           const originalIdx = items.findIndex(
                             (i) =>
@@ -203,15 +233,23 @@ const ToDoList: React.FC = () => {
                           }
                         }}
                       />
-                      <span className="font-bold text-gray-800">
-                        {item.name}
-                      </span>
+                      <div className="ml-1">
+                        <span className="font-bold text-gray-800">
+                          {item.name}
+                        </span>
+                        <div className="mb-2 text-gray-700">
+                          {item.description}
+                        </div>
+                      </div>
                     </div>
                     <span className="text-sm text-gray-500">
-                      {item.dueDate}
+                      {new Date(item.dueDate).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                      })}
                     </span>
                   </div>
-                  <div className="mb-2 text-gray-700">{item.description}</div>
                 </li>
               ))}
             </ul>
@@ -240,7 +278,7 @@ const ToDoList: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={true}
-                        className="form-checkbox h-4 w-4"
+                        className="form-checkbox h-4 w-4 accent-purple-500"
                         onChange={() => {
                           const originalIdx = items.findIndex(
                             (i) =>
@@ -259,15 +297,23 @@ const ToDoList: React.FC = () => {
                           }
                         }}
                       />
-                      <span className="font-bold text-gray-800">
-                        {item.name}
-                      </span>
+                      <div className="ml-1">
+                        <span className="font-bold text-gray-800">
+                          {item.name}
+                        </span>
+                        <div className="mb-2 text-gray-700">
+                          {item.description}
+                        </div>
+                      </div>
                     </div>
                     <span className="text-sm text-gray-500">
-                      {item.dueDate}
+                      {new Date(item.dueDate).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                      })}
                     </span>
                   </div>
-                  <div className="mb-2 text-gray-700">{item.description}</div>
                 </li>
               ))}
           </ul>
